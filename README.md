@@ -86,6 +86,47 @@ var ret = pathos.walk(o, [ 'cars', '1', 'make' ]);
 expect(ret).to.equal('Toyota');
 ```
 
+### Create an object given a set of paths
+
+If you have a set of paths and values, you can build the object which has the
+list of paths and values:
+
+``` js
+// list of paths and values that define an object
+var paths =
+  [ { key: [ 'name' ], value: 'Eugene' },
+    { key: [ 'number' ], value: 42 },
+    { key: [ 'tags', '0' ], value: 'tag1' },
+    { key: [ 'tags', '1' ], value: 'tag2' },
+    { key: [ 'tags', '2' ], value: 'tag3' },
+    { key: [ 'cars', '0', 'make' ], value: 'Toyota' },
+    { key: [ 'cars', '0', 'model' ], value: 'Camry' },
+    { key: [ 'cars', '1', 'make' ], value: 'Toyota' },
+    { key: [ 'cars', '1', 'model' ], value: 'Corolla' } ];
+
+// re-assemble the object based on paths
+var result = pathos.build(paths);
+
+// the re-assembled object should look similar to this
+var expected = {
+  name: 'Eugene',
+  number: 42,
+  tags: ['tag1', 'tag2', 'tag3'],
+  cars: [
+    {
+      make: 'Toyota',
+      model: 'Camry'
+    },
+    {
+      make: 'Toyota',
+      model: 'Corolla'
+    }
+  ]
+};
+
+expect(result).to.eql(expected);
+```
+
 ## License
 
 ### Copyright (c) 2013, Eugene Ware

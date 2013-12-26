@@ -42,3 +42,28 @@ function walk(obj, path) {
   }
   return obj;
 }
+
+module.exports.build = build;
+function build(paths) {
+  var o = {};
+  paths.forEach(function (path) {
+    buildPath(o, path.key, path.value);
+  });
+  return o;
+}
+
+function buildPath(obj, path, value) {
+  path = path.slice();
+  while (path.length > 0) {
+    var prop = path.shift();
+    if (obj[prop] !== undefined) {
+      obj = obj[prop];
+    } else if (path.length) {
+      obj[prop] = {};
+      obj = obj[prop];
+    } else {
+      obj[prop] = value;
+    }
+  }
+  return obj;
+}
