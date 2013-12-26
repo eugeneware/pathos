@@ -1,6 +1,6 @@
 {
   "name": "pathos",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Decompose a javascript object into a set of path/value slices.",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,17 @@
     "type": "git",
     "url": "https://github.com/eugeneware/pathos"
   },
-  "keywords": ["path","pathdb","pathway","json","object","slice","levelup","leveldb","level"],
+  "keywords": [
+    "path",
+    "pathdb",
+    "pathway",
+    "json",
+    "object",
+    "slice",
+    "levelup",
+    "leveldb",
+    "level"
+  ],
   "author": "Eugene Ware <eugene@noblesamurai.com>",
   "license": "BSD-3-Clause",
   "bugs": {
