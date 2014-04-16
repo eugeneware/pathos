@@ -121,4 +121,61 @@ describe('pathos', function() {
 
     done();
   });
+
+  it('should be able to set an objectd field with a path and value',
+    function(done) {
+      var o = {
+        name: 'Eugene',
+        number: 42,
+        tags: ['tag1', 'tag2', 'tag3'],
+        cars: [
+          {
+            make: 'Toyota',
+            model: 'Camry'
+          },
+          {
+            make: 'Toyota',
+            model: 'Corolla'
+          }
+        ]
+      };
+
+      pathos.set(o, [ 'cars', '1', 'make' ], 'Toyoda');
+      var expected1 = {
+        name: 'Eugene',
+        number: 42,
+        tags: ['tag1', 'tag2', 'tag3'],
+        cars: [
+          {
+            make: 'Toyota',
+            model: 'Camry'
+          },
+          {
+            make: 'Toyoda',
+            model: 'Corolla'
+          }
+        ]
+      };
+      expect(o).to.eql(expected1);
+
+      pathos.set(o, [ 'cars', '1', 'make' ], { old_name: 'Toyota', new_name: 'Toyota' });
+      var expected2 = {
+        name: 'Eugene',
+        number: 42,
+        tags: ['tag1', 'tag2', 'tag3'],
+        cars: [
+          {
+            make: 'Toyota',
+            model: 'Camry'
+          },
+          {
+            make: { old_name: 'Toyota', new_name: 'Toyota' },
+            model: 'Corolla'
+          }
+        ]
+      };
+      expect(o).to.eql(expected2);
+
+      done();
+    });
 });

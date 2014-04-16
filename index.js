@@ -67,3 +67,22 @@ function buildPath(obj, path, value) {
   }
   return obj;
 }
+
+module.exports.set = set;
+function set(o, path, value) {
+  var obj = o;
+  path = path.slice();
+  while (path.length > 1) {
+    var prop = path.shift();
+    if (obj[prop] !== undefined) {
+      obj = obj[prop];
+    } else {
+      return;
+    }
+  }
+  if (path.length === 1) {
+    var prop = path.shift();
+    obj[prop] = value;
+  }
+  return o;
+}
