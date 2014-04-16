@@ -77,7 +77,8 @@ function set(o, path, value) {
     if (obj[prop] !== undefined) {
       obj = obj[prop];
     } else {
-      return;
+      obj[prop] = {};
+      obj = obj[prop];
     }
   }
   if (path.length === 1) {

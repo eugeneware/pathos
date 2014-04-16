@@ -122,7 +122,7 @@ describe('pathos', function() {
     done();
   });
 
-  it('should be able to set an objectd field with a path and value',
+  it('should be able to set an object field with a path and value',
     function(done) {
       var o = {
         name: 'Eugene',
@@ -178,4 +178,21 @@ describe('pathos', function() {
 
       done();
     });
+
+  it('should handle setting of new properties', function(done) {
+    var o = {
+      nothing: 'here'
+    }
+    pathos.set(o, [ 'cars', '1', 'make' ], 'Toyoda');
+    var expected = {
+      nothing: 'here',
+      cars: {
+        '1': {
+          make: 'Toyoda'
+        }
+      }
+    };
+    expect(o).to.eql(expected);
+    done();
+  });
 });
