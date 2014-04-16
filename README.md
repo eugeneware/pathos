@@ -127,6 +127,48 @@ var expected = {
 expect(result).to.eql(expected);
 ```
 
+### Change a field in an object by it's path
+
+Given an object, and a path to a field, and a new value to the field, you can
+use `pathos#set` to update it's value:
+
+``` js
+var pathos = require('pathos');
+var o = {
+  name: 'Eugene',
+  number: 42,
+  tags: ['tag1', 'tag2', 'tag3'],
+  cars: [
+    {
+      make: 'Toyota',
+      model: 'Camry'
+    },
+    {
+      make: 'Toyota',
+      model: 'Corolla'
+    }
+  ]
+};
+
+pathos.set(o, [ 'cars', '1', 'make' ], 'Toyoda');
+var expected = {
+  name: 'Eugene',
+  number: 42,
+  tags: ['tag1', 'tag2', 'tag3'],
+  cars: [
+    {
+      make: 'Toyota',
+      model: 'Camry'
+    },
+    {
+      make: 'Toyoda',
+      model: 'Corolla'
+    }
+  ]
+};
+expect(o).to.eql(expected);
+```
+
 ## License
 
 ### Copyright (c) 2013, Eugene Ware
