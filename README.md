@@ -212,6 +212,116 @@ expect(paths).to.eql(
 });
 ```
 
+### Rewriting an object
+
+You can write a function that visits every path, value pair in an object
+and then optionally remove the path (by returning `false`), keep the object
+(by returning `true`) or by changing the property path or value:
+
+
+#### Rename a field
+``` js
+// rename a field
+var pathos = require('pathos');
+var o = {
+  name: 'Eugene',
+  number: 42,
+  tags: ['tag1', 'tag2', 'tag3'],
+  cars: [
+    {
+      make: 'Toyota',
+      model: 'Camry'
+    },
+    {
+      make: 'Toyota',
+      model: 'Corolla'
+    }
+  ]
+};
+
+function rename(key, value) {
+  if (key[key.length - 1] === 'make') {
+    key[key.length - 1] = 'manufacturer';
+    return {
+      key: key,
+      value: value
+    };
+  } else {
+    return true;
+  }
+}
+
+pathos.rewrite(o, rename);
+var expected = {
+  name: 'Eugene',
+  number: 42,
+  tags: ['tag1', 'tag2', 'tag3'],
+  cars: [
+    {
+      manufacturer: 'Toyota',
+      model: 'Camry'
+    },
+    {
+      manufacturer: 'Toyota',
+      model: 'Corolla'
+    }
+  ]
+};
+
+expect(o).to.eql(expected);
+```
+
+#### Change a field's value
+
+``` js
+var pathos = require('pathos');
+var o = {
+  name: 'Eugene',
+  number: 42,
+  tags: ['tag1', 'tag2', 'tag3'],
+  cars: [
+    {
+      make: 'Toyota',
+      model: 'Camry'
+    },
+    {
+      make: 'Toyota',
+      model: 'Corolla'
+    }
+  ]
+};
+
+function change(key, value) {
+  if (key[key.length - 1] === 'make') {
+    return {
+      key: key,
+      value: 'Toyoda'
+    };
+  } else {
+    return true;
+  }
+}
+
+pathos.rewrite(o, change);
+var expected = {
+  name: 'Eugene',
+  number: 42,
+  tags: ['tag1', 'tag2', 'tag3'],
+  cars: [
+    {
+      make: 'Toyoda',
+      model: 'Camry'
+    },
+    {
+      make: 'Toyoda',
+      model: 'Corolla'
+    }
+  ]
+};
+
+expect(o).to.eql(expected);
+```
+
 ## License
 
 ### Copyright (c) 2013, Eugene Ware
