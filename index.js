@@ -38,9 +38,10 @@ function visit(data, fn, parts) {
 }
 
 module.exports.rewrite = rewrite;
-function rewrite(data, fn, parts) {
+function rewrite(data, fn, parts, root) {
   if (typeof parts === 'undefined') {
     parts = [];
+    root = data;
   }
 
   if (data !== null && typeof data === 'object') {
@@ -55,7 +56,7 @@ function rewrite(data, fn, parts) {
     keys.forEach(function (key) {
       var value = data[key];
       if (typeof value === 'object') {
-        rewrite(value, fn, parts.concat(key));
+        rewrite(value, fn, parts.concat(key), root);
       } else {
         var result = fn(parts.concat(key), data[key]);
         if (result === true || typeof result === 'undefined') {
@@ -71,7 +72,7 @@ function rewrite(data, fn, parts) {
             delete data[key];
           }
 
-          data[result.key] = result.value;
+          set(root, result.key, result.value);
         }
       }
     });
