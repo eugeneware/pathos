@@ -1,32 +1,12 @@
 module.exports = slice;
 module.exports.slice = slice;
-function slice(parts, data) {
-  if (arguments.length < 2) {
-    data = parts;
-    parts = [];
-  }
-
+function slice(data) {
   var paths = [];
-  if (data !== null && typeof data === 'object') {
-    return saveChildren();
-  } else {
-    paths.push({ key: parts, value: data });
-    return paths;
+  function storePaths(key, value) {
+    paths.push({ key: key, value: value });
   }
-
-  function saveChildren() {
-    var keys = Object.keys(data);
-    keys.forEach(function (key) {
-      var value = data[key];
-      if (typeof value === 'object') {
-        paths = paths.concat(slice(parts.concat(key), value));
-      } else {
-        paths.push({ key: parts.concat(key), value: data[key] });
-      }
-    });
-
-    return paths;
-  }
+  visit(data, storePaths);
+  return paths;
 }
 
 module.exports.visit = visit;
