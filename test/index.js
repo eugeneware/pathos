@@ -88,6 +88,29 @@ describe('pathos', function() {
     done();
   });
 
+  it('should be able to retrieve the root of an object', function(done) {
+    var o = {
+      name: 'Eugene',
+      number: 42,
+      tags: ['tag1', 'tag2', 'tag3'],
+      cars: [
+        {
+          make: 'Toyota',
+          model: 'Camry'
+        },
+        {
+          make: 'Toyota',
+          model: 'Corolla'
+        }
+      ]
+    };
+
+    var ret = pathos.walk(o, []);
+    var expected = JSON.parse(JSON.stringify(o));
+    expect(ret).to.eql(expected);
+    done();
+  });
+
   it('should be able to build an object from paths', function(done) {
     var o = {
       name: 'Eugene',
