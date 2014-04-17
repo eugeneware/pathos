@@ -135,7 +135,11 @@ function set(o, path, value) {
   }
   if (path.length === 1) {
     var prop = path.shift();
-    obj[prop] = value;
+    if (typeof value === 'undefined') {
+      delete obj[prop];
+    } else {
+      obj[prop] = value;
+    }
   }
   return o;
 }
