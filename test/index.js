@@ -274,7 +274,7 @@ describe('pathos', function() {
 
     function rename(key, value) {
       if (key[key.length - 1] === 'make') {
-        key = 'manufacturer';
+        key[key.length - 1] = 'manufacturer';
         return {
           key: key,
           value: value
