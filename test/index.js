@@ -254,4 +254,106 @@ describe('pathos', function() {
         { key: [ 'cars', '1', 'model' ], value: 'Corolla' } ]);
     done();
   });
+
+  it('should be able to rename a field', function(done) {
+    var o = {
+      name: 'Eugene',
+      number: 42,
+      tags: ['tag1', 'tag2', 'tag3'],
+      cars: [
+        {
+          make: 'Toyota',
+          model: 'Camry'
+        },
+        {
+          make: 'Toyota',
+          model: 'Corolla'
+        }
+      ]
+    };
+
+    function rename(key, value) {
+      if (key[key.length - 1] === 'make') {
+        key = 'manufacturer';
+        return {
+          key: key,
+          value: value
+        };
+      } else {
+        return true;
+      }
+    }
+
+    pathos.rewrite(o, rename);
+    var expected = {
+      name: 'Eugene',
+      number: 42,
+      tags: ['tag1', 'tag2', 'tag3'],
+      cars: [
+        {
+          manufacturer: 'Toyota',
+          model: 'Camry'
+        },
+        {
+          manufacturer: 'Toyota',
+          model: 'Corolla'
+        }
+      ]
+    };
+
+    expect(o).to.eql(expected);
+
+    done();
+  });
+
+  it('should be able to remove a field', function(done) {
+    var o = {
+      name: 'Eugene',
+      number: 42,
+      tags: ['tag1', 'tag2', 'tag3'],
+      cars: [
+        {
+          make: 'Toyota',
+          model: 'Camry'
+        },
+        {
+          make: 'Toyota',
+          model: 'Corolla'
+        }
+      ]
+    };
+
+    var expected = {
+      name: 'Eugene',
+      number: 42,
+      tags: ['tag1', 'tag2', 'tag3'],
+      cars: [
+        {
+          make: 'Toyota'
+        },
+        {
+          make: 'Toyota'
+        }
+      ]
+    };
+
+    function remove1(key, value) {
+      return key[key.length - 1] !== 'model';
+    }
+    pathos.rewrite(o, remove1);
+    expect(o).to.eql(expected);
+
+    function remove2(key, value) {
+      if (key[key.length - 1] === 'model') {
+        return {
+          key: key
+        };
+      }
+      return true;
+    }
+    pathos.rewrite(o, remove2);
+    expect(o).to.eql(expected);
+
+    done();
+  });
 });

@@ -16,13 +16,13 @@ function visit(data, fn, parts) {
   }
 
   if (data !== null && typeof data === 'object') {
-    return saveChildren();
+    return visitChildren();
   } else {
     fn(parts, data);
     return;
   }
 
-  function saveChildren() {
+  function visitChildren() {
     var keys = Object.keys(data);
     keys.forEach(function (key) {
       var value = data[key];
@@ -30,6 +30,49 @@ function visit(data, fn, parts) {
         visit(value, fn, parts.concat(key));
       } else {
         fn(parts.concat(key), data[key]);
+      }
+    });
+
+    return;
+  }
+}
+
+module.exports.rewrite = rewrite;
+function rewrite(data, fn, parts) {
+  if (typeof parts === 'undefined') {
+    parts = [];
+  }
+
+  if (data !== null && typeof data === 'object') {
+    return visitChildren();
+  } else {
+    fn(parts, data);
+    return;
+  }
+
+  function visitChildren() {
+    var keys = Object.keys(data);
+    keys.forEach(function (key) {
+      var value = data[key];
+      if (typeof value === 'object') {
+        rewrite(value, fn, parts.concat(key));
+      } else {
+        var result = fn(parts.concat(key), data[key]);
+        if (result === true || typeof result === 'undefined') {
+          // do nothing
+          return;
+        } else if (result === false) {
+          // explicitly remove this path
+          delete data[key];
+        } else if (typeof result.key !== 'undefined') {
+          if (typeof result.value === 'undefined' ||
+              result.key !== key) {
+            // ask to remove key, or key name has changed
+            delete data[key];
+          }
+
+          data[result.key] = result.value;
+        }
       }
     });
 
