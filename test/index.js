@@ -306,6 +306,56 @@ describe('pathos', function() {
     done();
   });
 
+  it('should be able to change a fields\'s value', function(done) {
+    var o = {
+      name: 'Eugene',
+      number: 42,
+      tags: ['tag1', 'tag2', 'tag3'],
+      cars: [
+        {
+          make: 'Toyota',
+          model: 'Camry'
+        },
+        {
+          make: 'Toyota',
+          model: 'Corolla'
+        }
+      ]
+    };
+
+    function change(key, value) {
+      if (key[key.length - 1] === 'make') {
+        return {
+          key: key,
+          value: 'Toyoda'
+        };
+      } else {
+        return true;
+      }
+    }
+
+    pathos.rewrite(o, change);
+    var expected = {
+      name: 'Eugene',
+      number: 42,
+      tags: ['tag1', 'tag2', 'tag3'],
+      cars: [
+        {
+          make: 'Toyoda',
+          model: 'Camry'
+        },
+        {
+          make: 'Toyoda',
+          model: 'Corolla'
+        }
+      ]
+    };
+
+    expect(o).to.eql(expected);
+
+    done();
+  });
+
   it('should be able to remove a field', function(done) {
     var o = {
       name: 'Eugene',
