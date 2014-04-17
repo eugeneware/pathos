@@ -29,6 +29,34 @@ function slice(parts, data) {
   }
 }
 
+module.exports.visit = visit;
+function visit(data, fn, parts) {
+  if (typeof parts === 'undefined') {
+    parts = [];
+  }
+
+  if (data !== null && typeof data === 'object') {
+    return saveChildren();
+  } else {
+    fn(parts, data);
+    return;
+  }
+
+  function saveChildren() {
+    var keys = Object.keys(data);
+    keys.forEach(function (key) {
+      var value = data[key];
+      if (typeof value === 'object') {
+        visit(value, fn, parts.concat(key));
+      } else {
+        fn(parts.concat(key), data[key]);
+      }
+    });
+
+    return;
+  }
+}
+
 module.exports.walk = walk;
 function walk(obj, path) {
   path = path.slice();

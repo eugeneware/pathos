@@ -218,4 +218,40 @@ describe('pathos', function() {
     expect(o).to.eql(expected);
     done();
   });
+
+  it('should be able to visit every key-value pair', function(done) {
+    var o = {
+      name: 'Eugene',
+      number: 42,
+      tags: ['tag1', 'tag2', 'tag3'],
+      cars: [
+        {
+          make: 'Toyota',
+          model: 'Camry'
+        },
+        {
+          make: 'Toyota',
+          model: 'Corolla'
+        }
+      ]
+    };
+
+    var paths = [];
+    function visit(key, value) {
+      paths.push({ key: key, value: value });
+    }
+
+    pathos.visit(o, visit);
+    expect(paths).to.eql(
+      [ { key: [ 'name' ], value: 'Eugene' },
+        { key: [ 'number' ], value: 42 },
+        { key: [ 'tags', '0' ], value: 'tag1' },
+        { key: [ 'tags', '1' ], value: 'tag2' },
+        { key: [ 'tags', '2' ], value: 'tag3' },
+        { key: [ 'cars', '0', 'make' ], value: 'Toyota' },
+        { key: [ 'cars', '0', 'model' ], value: 'Camry' },
+        { key: [ 'cars', '1', 'make' ], value: 'Toyota' },
+        { key: [ 'cars', '1', 'model' ], value: 'Corolla' } ]);
+    done();
+  });
 });
