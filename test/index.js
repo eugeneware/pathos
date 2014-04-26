@@ -23,13 +23,15 @@ describe('pathos', function() {
     expect(paths).to.eql(
       [ { key: [ 'name' ], value: 'Eugene' },
         { key: [ 'number' ], value: 42 },
-        { key: [ 'tags', '0' ], value: 'tag1' },
-        { key: [ 'tags', '1' ], value: 'tag2' },
-        { key: [ 'tags', '2' ], value: 'tag3' },
-        { key: [ 'cars', '0', 'make' ], value: 'Toyota' },
-        { key: [ 'cars', '0', 'model' ], value: 'Camry' },
-        { key: [ 'cars', '1', 'make' ], value: 'Toyota' },
-        { key: [ 'cars', '1', 'model' ], value: 'Corolla' } ]);
+        { key: [ 'tags', 0 ], value: 'tag1' },
+        { key: [ 'tags', 1 ], value: 'tag2' },
+        { key: [ 'tags', 2 ], value: 'tag3' },
+        { key: [ 'cars', 0, 'make' ], value: 'Toyota' },
+        { key: [ 'cars', 0, 'model' ], value: 'Camry' },
+        { key: [ 'cars', 1, 'make' ], value: 'Toyota' },
+        { key: [ 'cars', 1, 'model' ], value: 'Corolla' } ]);
+    expect(typeof paths[2].key[1]).to.equal('number');
+    expect(typeof paths[5].key[1]).to.equal('number');
     done();
   });
 
@@ -141,6 +143,47 @@ describe('pathos', function() {
 
     var result = pathos.build(paths);
     expect(result).to.eql(o);
+    expect(Array.isArray(result.tags)).to.equal(false);
+    expect(Array.isArray(result.cars)).to.equal(false);
+
+    done();
+  });
+
+  it('should be able to build an object from paths (arrays)', function(done) {
+    var o = {
+      name: 'Eugene',
+      number: 42,
+      tags: ['tag1', 'tag2', 'tag3'],
+      cars: [
+        {
+          make: 'Toyota',
+          model: 'Camry'
+        },
+        {
+          make: 'Toyota',
+          model: 'Corolla'
+        }
+      ]
+    };
+
+    var paths =
+      [ { key: [ 'name' ], value: 'Eugene' },
+        { key: [ 'number' ], value: 42 },
+        { key: [ 'tags', 0 ], value: 'tag1' },
+        { key: [ 'tags', 1 ], value: 'tag2' },
+        { key: [ 'tags', 2 ], value: 'tag3' },
+        { key: [ 'cars', 0, 'make' ], value: 'Toyota' },
+        { key: [ 'cars', 0, 'model' ], value: 'Camry' },
+        { key: [ 'cars', 1, 'make' ], value: 'Toyota' },
+        { key: [ 'cars', 1, 'model' ], value: 'Corolla' } ];
+
+    var result = pathos.build(paths);
+    expect(result).to.eql(o);
+    expect(Array.isArray(result.tags)).to.equal(true);
+    expect(Array.isArray(result.cars)).to.equal(true);
+    done();
+  });
+
   it('should be able to set an object field with a path and value',
     function(done) {
       var o = {

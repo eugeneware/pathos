@@ -26,6 +26,9 @@ function visit(data, fn, parts) {
     var keys = Object.keys(data);
     keys.forEach(function (key) {
       var value = data[key];
+      if (Array.isArray(data)) {
+        key = parseInt(key, 10);
+      }
       if (typeof value === 'object') {
         visit(value, fn, parts.concat(key));
       } else {
@@ -111,7 +114,11 @@ function buildPath(obj, path, value) {
     if (obj[prop] !== undefined) {
       obj = obj[prop];
     } else if (path.length) {
-      obj[prop] = {};
+      if (typeof path[0] === 'number') {
+        obj[prop] = [];
+      } else {
+        obj[prop] = {};
+      }
       obj = obj[prop];
     } else {
       obj[prop] = value;
