@@ -89,7 +89,7 @@ function walk(obj, path) {
   path = path.slice();
   while (path.length > 0) {
     var prop = path.shift();
-    if (obj[prop] !== undefined) {
+    if (obj && obj[prop] !== undefined) {
       obj = obj[prop];
     } else {
       return;
