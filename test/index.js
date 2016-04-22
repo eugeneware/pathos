@@ -48,6 +48,35 @@ describe('pathos', function() {
     done();
   });
 
+  it('should be able to slice a top level array', function(done) {
+    var o = ['tag1', 'tag2', 'tag3'];
+
+    var paths = pathos.slice(o);
+    expect(paths).to.eql([
+      { key: [], value: [] },
+      { key: [ 0 ], value: 'tag1' },
+      { key: [ 1 ], value: 'tag2' },
+      { key: [ 2 ], value: 'tag3' }
+    ]);
+    done();
+  });
+
+  it('should be able to build an object from a top level array slice', function(done) {
+    var o = ['tag1', 'tag2', 'tag3'];
+
+    var paths = [
+      { key: [], value: [] },
+      { key: [ 0 ], value: 'tag1' },
+      { key: [ 1 ], value: 'tag2' },
+      { key: [ 2 ], value: 'tag3' }
+    ];
+
+    var result = pathos.build(paths);
+    expect(Array.isArray(result)).to.equal(true);
+    expect(result).to.eql(o);
+    done();
+  });
+
   it('should be able to build an object from empty array paths', function(done) {
     var o = {
       tags: [],

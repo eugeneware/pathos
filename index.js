@@ -15,6 +15,10 @@ function visit(data, fn, parts) {
     parts = [];
   }
 
+  if (Array.isArray(data)) {
+    fn(parts, []);
+  }
+
   if (data !== null && typeof data === 'object') {
     return visitChildren();
   } else {
@@ -26,9 +30,6 @@ function visit(data, fn, parts) {
     var keys = Object.keys(data);
     keys.forEach(function (key) {
       var value = data[key];
-      if (Array.isArray(value)) {
-        fn(parts.concat(key), []);
-      }
       if (Array.isArray(data)) {
         key = parseInt(key, 10);
       }
@@ -103,15 +104,19 @@ function walk(obj, path) {
 
 module.exports.build = build;
 function build(paths) {
-  var o = {};
+  var o = { };
   paths.forEach(function (path) {
-    buildPath(o, path.key, path.value);
+    o = buildPath(o, path.key, path.value);
   });
   return o;
 }
 
 function buildPath(obj, path, value) {
+  var root = obj;
   path = path.slice();
+  if (path.length === 0 && typeof value !== 'undefined') {
+    root = value;
+  }
   while (path.length > 0) {
     var prop = path.shift();
     if (obj[prop] !== undefined) {
@@ -127,7 +132,7 @@ function buildPath(obj, path, value) {
       obj[prop] = value;
     }
   }
-  return obj;
+  return root;
 }
 
 module.exports.set = set;
