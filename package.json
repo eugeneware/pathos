@@ -1,6 +1,6 @@
 {
   "name": "pathos",
-  "version": "0.5.1",
+  "version": "1.0.0",
   "description": "Decompose a javascript object into a set of path/value slices.",
   "main": "index.js",
   "scripts": {
