@@ -26,6 +26,9 @@ function visit(data, fn, parts) {
     var keys = Object.keys(data);
     keys.forEach(function (key) {
       var value = data[key];
+      if (Array.isArray(value)) {
+        fn(parts.concat(key), []);
+      }
       if (Array.isArray(data)) {
         key = parseInt(key, 10);
       }

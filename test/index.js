@@ -23,15 +23,47 @@ describe('pathos', function() {
     expect(paths).to.eql(
       [ { key: [ 'name' ], value: 'Eugene' },
         { key: [ 'number' ], value: 42 },
+        { key: [ 'tags' ], value: [] },
         { key: [ 'tags', 0 ], value: 'tag1' },
         { key: [ 'tags', 1 ], value: 'tag2' },
         { key: [ 'tags', 2 ], value: 'tag3' },
+        { key: [ 'cars' ], value: [] },
         { key: [ 'cars', 0, 'make' ], value: 'Toyota' },
         { key: [ 'cars', 0, 'model' ], value: 'Camry' },
         { key: [ 'cars', 1, 'make' ], value: 'Toyota' },
         { key: [ 'cars', 1, 'model' ], value: 'Corolla' } ]);
-    expect(typeof paths[2].key[1]).to.equal('number');
-    expect(typeof paths[5].key[1]).to.equal('number');
+    expect(typeof paths[3].key[1]).to.equal('number');
+    expect(typeof paths[7].key[1]).to.equal('number');
+    done();
+  });
+
+  it('should be able to slice an object with an empty array', function(done) {
+    var o = {
+      tags: [],
+    };
+
+    var paths = pathos.slice(o);
+    expect(paths).to.eql(
+      [ { key: [ 'tags' ], value: [] } ]);
+    done();
+  });
+
+  it('should be able to build an object from empty array paths', function(done) {
+    var o = {
+      tags: [],
+      moreTags: ['do', 're', 'mi']
+    };
+
+    var paths = [
+      { key: [ 'tags' ], value: [] },
+      { key: [ 'moreTags' ], value: [] },
+      { key: [ 'moreTags', 0 ], value: 'do' },
+      { key: [ 'moreTags', 1 ], value: 're' },
+      { key: [ 'moreTags', 2 ], value: 'mi' }
+    ];
+
+    var result = pathos.build(paths);
+    expect(result).to.eql(o);
     done();
   });
 
@@ -57,13 +89,15 @@ describe('pathos', function() {
     expect(paths).to.eql(
       [ { key: [ 'name' ], value: 'Eugene' },
         { key: [ 'number' ], value: 42 },
-        { key: [ 'tags', '0' ], value: 'tag1' },
-        { key: [ 'tags', '1' ], value: 'tag2' },
-        { key: [ 'tags', '2' ], value: 'tag3' },
-        { key: [ 'cars', '0', 'make' ], value: 'Toyota' },
-        { key: [ 'cars', '0', 'model' ], value: 'Camry' },
-        { key: [ 'cars', '1', 'make' ], value: 'Toyota' },
-        { key: [ 'cars', '1', 'model' ], value: 'Corolla' } ]);
+        { key: [ 'tags' ], value: [] },
+        { key: [ 'tags', 0 ], value: 'tag1' },
+        { key: [ 'tags', 1 ], value: 'tag2' },
+        { key: [ 'tags', 2 ], value: 'tag3' },
+        { key: [ 'cars' ], value: [] },
+        { key: [ 'cars', 0, 'make' ], value: 'Toyota' },
+        { key: [ 'cars', 0, 'model' ], value: 'Camry' },
+        { key: [ 'cars', 1, 'make' ], value: 'Toyota' },
+        { key: [ 'cars', 1, 'model' ], value: 'Corolla' } ]);
     done();
   });
 
@@ -284,9 +318,11 @@ describe('pathos', function() {
     expect(paths).to.eql(
       [ { key: [ 'name' ], value: 'Eugene' },
         { key: [ 'number' ], value: 42 },
+        { key: [ 'tags' ], value: [] },
         { key: [ 'tags', '0' ], value: 'tag1' },
         { key: [ 'tags', '1' ], value: 'tag2' },
         { key: [ 'tags', '2' ], value: 'tag3' },
+        { key: [ 'cars' ], value: [] },
         { key: [ 'cars', '0', 'make' ], value: 'Toyota' },
         { key: [ 'cars', '0', 'model' ], value: 'Camry' },
         { key: [ 'cars', '1', 'make' ], value: 'Toyota' },
@@ -546,9 +582,11 @@ describe('pathos', function() {
     expect(paths).to.eql(
       [ { key: [ 'name' ], value: 'Eugene' },
         { key: [ 'number' ], value: 42 },
+        { key: [ 'tags' ], value: [] },
         { key: [ 'tags', '0' ], value: 'tag1' },
         { key: [ 'tags', '1' ], value: 'tag2' },
         { key: [ 'tags', '2' ], value: 'tag3' },
+        { key: [ 'cars' ], value: [] },
         { key: [ 'cars', '0', 'make' ], value: 'Toyota' },
         { key: [ 'cars', '0', 'model' ], value: 'Camry' },
         { key: [ 'cars', '1', 'make' ], value: 'Toyota' },
